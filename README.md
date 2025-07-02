@@ -56,6 +56,14 @@ kubectl -n argocd patch secret argocd-secret --context $KUBECTX_CLUSTER2 \
 
 ### Stage Istio in Cluster1
 
+#### Start with Cert-manager
+
+```sh
+k apply -f clusters/cluster1/infra/cert-manager.yaml -n argocd --context $KUBECTX_CLUSTER1
+```
+
+#### Setup Istio
+
 ```sh
 kubectl apply -f apps/cluster1-infra.yaml -n argocd --context $KUBECTX_CLUSTER1
 ```

@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster1-infra
+  name: cluster1-istio
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/shamusx/crispy-octo-couscous.git
     targetRevision: HEAD
-    path: clusters/cluster1/infra
+    path: apps/istio
     directory:
       recurse: true
   destination:

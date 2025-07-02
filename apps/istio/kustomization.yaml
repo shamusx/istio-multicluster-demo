@@ -1,0 +1,6 @@
+resources:
+- istio-base.yaml
+- istio-ew-gw.yaml
+- istiod-prod-stable.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
