@@ -46,7 +46,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-  dependsOn:
-    - kind: Application
-      name: cert-manager
-      namespace: argocd

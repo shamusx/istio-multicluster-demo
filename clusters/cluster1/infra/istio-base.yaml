@@ -27,7 +27,3 @@ spec:
   destination:
     server: "https://kubernetes.default.svc"
     namespace: istio-system
-  dependsOn:
-    - kind: Application
-      name: istio-base
-      namespace: argocd
