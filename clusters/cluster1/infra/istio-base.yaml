@@ -16,12 +16,12 @@ spec:
   source:
     chart: base
     repoURL: https://tis.tetrate.io/charts
-    targetRevision: 1.25.3
+    targetRevision: 1.25.3-tetrate3
     helm:
       valuesObject:
         defaultRevision: 1-25-3
         global:
-          tag: 1.25.3
+          tag: 1.25.3-tetrate3
   destination:
     server: "https://kubernetes.default.svc"
     namespace: istio-system

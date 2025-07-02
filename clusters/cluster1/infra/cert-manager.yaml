@@ -29,7 +29,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/your-org/istio-multicluster.git  # Update with your repo
+    repoURL: https://github.com/shamusx/crispy-octo-couscous.git  # Update with your repo
     targetRevision: HEAD
     path: clusters/common/pki
   destination:

@@ -16,7 +16,7 @@ spec:
   source:
     chart: gateway
     repoURL: https://tis.tetrate.io/charts
-    targetRevision: 1.25.3
+    targetRevision: 1.25.3-tetrate3
     helm:
       valuesObject:
         revision: 1-25-3
