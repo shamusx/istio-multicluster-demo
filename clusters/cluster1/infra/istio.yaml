@@ -9,6 +9,8 @@ spec:
     repoURL: https://github.com/shamusx/crispy-octo-couscous.git
     targetRevision: HEAD
     path: apps/istio
+    directory:
+      recurse: false
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
