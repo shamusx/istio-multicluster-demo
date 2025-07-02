@@ -1,4 +1,0 @@
-resources:
-- istio-base.yaml
-- istio-ew-gw.yaml
-- istiod-prod-stable.yaml
