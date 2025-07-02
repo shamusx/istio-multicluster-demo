@@ -16,14 +16,13 @@ spec:
   source:
     chart: istiod
     repoURL: https://tis.tetrate.io/charts
-    targetRevision: 1.25.3-tetrate3
+    targetRevision: 1.25.3+tetrate3
     helm:
       valuesObject:
         revisionTags:
           - prod-stable
         revision: 1-25-3
         global:
-          tag: 1.25.3-tetrate3
           meshID: demomesh
           network: cluster1
           multiCluster:
