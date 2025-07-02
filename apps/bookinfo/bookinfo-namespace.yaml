@@ -6,3 +6,4 @@ metadata:
   labels:
     istio-injection: enabled
     istio.io/rev: prod-stable
+    
