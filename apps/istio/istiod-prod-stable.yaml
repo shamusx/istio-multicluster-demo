@@ -15,6 +15,9 @@ spec:
       allowEmpty: true
     syncOptions:     
       - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        topology.istio.io/network: cluster1
   source:
     chart: istiod
     repoURL: https://tis.tetrate.io/charts
