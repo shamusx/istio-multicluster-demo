@@ -11,6 +11,9 @@ spec:
     chart: cert-manager
     helm:
       releaseName: cert-manager
+      valuesObject:
+        crds:
+          enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager
