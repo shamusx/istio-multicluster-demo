@@ -4,6 +4,8 @@ kind: Application
 metadata:
   name: istiod-stable
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
 spec:
   project: default
   syncPolicy:
@@ -32,10 +34,3 @@ spec:
   destination:
     server: "https://kubernetes.default.svc"
     namespace: istio-system
-  dependsOn:
-    - kind: Application
-      name: istio-base
-      namespace: argocd
-    - kind: Application
-      name: cert-manager-mesh-ca
-      namespace: argocd

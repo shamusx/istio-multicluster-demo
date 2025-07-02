@@ -4,6 +4,8 @@ kind: Application
 metadata:
   name: istio-ew-gw
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
 spec:
   project: default
   syncPolicy:
