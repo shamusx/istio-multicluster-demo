@@ -38,9 +38,9 @@ applications:
           revision: 1-25-3
           global:
             meshID: demomesh
-            network: cluster1
+            network: cluster2
             multiCluster:
-              clusterName: app-cluster1
+              clusterName: app-cluster2
           meshConfig:
             accessLogFile: /dev/stdout
   - name: istio-ew-gw
