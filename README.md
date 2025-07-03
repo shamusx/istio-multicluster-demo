@@ -183,8 +183,76 @@ kubectl apply -f clusters/cluster1/sleep.yaml --context $KUBECTX_CLUSTER1
 
 ```sh
 # Deploy Demo Applications 
-kubectl apply -f clusters/cluster2/bookinfo.yaml --context $KUBECTX_CLUSTER2
 kubectl apply -f clusters/cluster2/sleep.yaml --context $KUBECTX_CLUSTER2
+```
+
+### Test Traffic
+
+#### Cluster 1
+
+```sh
+kubectl exec -it $(kubectl get pod -l app=sleep -n sleep -o jsonpath='{.items[0].metadata.name}' --context $KUBECTX_CLUSTER1) -n sleep --context $KUBECTX_CLUSTER1 -- curl http://productpage.bookinfo:9080 -I
+# Expected Output
+# HTTP/1.1 200 OK
+# server: envoy
+# date: Thu, 03 Jul 2025 18:15:54 GMT
+# content-type: text/html; charset=utf-8
+# content-length: 2080
+# x-envoy-upstream-service-time: 8
+```
+
+#### Cluster 2
+
+```sh
+kubectl exec -it $(kubectl get pod -l app=sleep -n sleep -o jsonpath='{.items[0].metadata.name}' --context $KUBECTX_CLUSTER2) -n sleep --context $KUBECTX_CLUSTER2 -- curl http://productpage.bookinfo:9080 -I
+# Expected Output
+# curl: (6) Could not resolve host: productpage.bookinfo
+```
+
+### Enable East-West Gateway
+
+```sh
+# Cluster1
+NAMESPACE=istio-eastwest-gateway
+cat <<EOF | kubectl apply -n $NAMESPACE -f - --context $KUBECTX_CLUSTER1
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: cross-network-gateway
+spec:
+  selector:
+    istio: ew-gw
+  servers:
+    - port:
+        number: 15443
+        name: tls
+        protocol: TLS
+      tls:
+        mode: AUTO_PASSTHROUGH
+      hosts:
+        - "*.local"
+EOF
+
+# Cluster2
+NAMESPACE=istio-eastwest-gateway
+cat <<EOF | kubectl apply -n $NAMESPACE -f - --context $KUBECTX_CLUSTER2
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: cross-network-gateway
+spec:
+  selector:
+    istio: ew-gw
+  servers:
+    - port:
+        number: 15443
+        name: tls
+        protocol: TLS
+      tls:
+        mode: AUTO_PASSTHROUGH
+      hosts:
+        - "*.local"
+EOF
 ```
 
 ## Verification

@@ -54,4 +54,4 @@ applications:
       helm:
         valuesObject:
           revision: 1-25-3
-          networkGateway: cluster2
+          networkGateway: cluster1
