@@ -1,24 +1,66 @@
-# Istio Multi-Cluster
+# Istio Multi-Cluster Deployment
 
-## Bash Script to 
+This repository contains the configuration and deployment files for a multi-cluster Istio service mesh, featuring:
 
-1. PKI Setup
-2. Istiod - revisioned multi-cluster prep
-3. Istio EastWest Gateway
-4. MultiPrimary discovery
+- **Cluster 1 (Backend)**: Hosts backend services and applications
+- **Cluster 2 (Edge)**: Serves as the external-facing edge cluster with ingress capabilities
 
-## Setup
+## Architecture Overview
 
-```sh
-export KUBECTX_CLUSTER1=aks-sw0-124-eastus-0
-export KUBECTX_CLUSTER2=aks-sw0-124-eastus-1
+```mermaid
+graph TD
+    Internet[Internet] -->|HTTPS| IGW[Istio Ingress Gateway]
+    
+    subgraph Edge_Cluster[Edge Cluster - Cluster 2]
+        IGW
+        EGW[East-West Gateway]
+        IGW --> EGW
+    end
+    
+    subgraph Backend_Cluster[Backend Cluster - Cluster 1]
+        Services[Backend Services]
+        EGW2[East-West Gateway]
+        Services <--> EGW2
+    end
+    
+    EGW <-->|mTLS| EGW2
+    
+    classDef cluster fill:#f9f,stroke:#333,stroke-width:2px;
+    class Edge_Cluster,Backend_Cluster cluster;
 ```
 
-### ArgoCD Install
+## Features
 
-Install ArgoCD in both clusters and update the password `Tetrate123`
+- **Multi-Primary** configuration for high availability
+- **mTLS** secured service-to-service communication
+- **Centralized Certificate Management** using cert-manager
+- **GitOps** workflow with ArgoCD
+- **Multi-cluster Service Discovery**
 
-#### Cluster1
+## Prerequisites
+
+- Two Kubernetes clusters (AKS, EKS, or GKE)
+- `kubectl` configured with access to both clusters
+- `istioctl` CLI installed
+- `argocd` CLI installed (for ArgoCD management)
+- Helm 3.x installed
+
+## Cluster Configuration
+
+### Cluster Contexts
+
+```sh
+export KUBECTX_CLUSTER1=aks-sw0-124-eastus-0  # Backend Cluster
+export KUBECTX_CLUSTER2=aks-sw0-124-eastus-1  # Edge Cluster
+```
+
+## Installation
+
+### 1. ArgoCD Installation
+
+ArgoCD will be installed in both clusters to manage the GitOps workflow. The password is set to `Tetrite123` by default.
+
+#### Backend Cluster (Cluster 1)
 
 ```sh
 # Install ArgoCD in Cluster1
@@ -36,10 +78,10 @@ kubectl -n argocd patch secret argocd-secret --context $KUBECTX_CLUSTER1 \
   }}'
 ```
 
-#### Cluster2
+#### Edge Cluster (Cluster 2)
 
 ```sh
-# Install ArgoCD in Cluster2
+# Install ArgoCD in Edge Cluster
 kubectl create namespace argocd --context $KUBECTX_CLUSTER2
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --context $KUBECTX_CLUSTER2
 
@@ -54,16 +96,95 @@ kubectl -n argocd patch secret argocd-secret --context $KUBECTX_CLUSTER2 \
   }}'
 ```
 
-### Stage Istio in Cluster1
+### 2. Certificate Management
 
-#### Start with Cert-manager
+#### Install Cert-manager
+
+Step to install cert-manager and create a common CA for both clusters.
 
 ```sh
-k apply -f clusters/cluster1/infra/cert-manager.yaml -n argocd --context $KUBECTX_CLUSTER1
+# Install cert-manager in Backend Cluster
+kubectl apply -f clusters/cluster1/cert-manager.yaml --context $KUBECTX_CLUSTER1
+
+# Install cert-manager in Edge Cluster
+kubectl apply -f clusters/cluster2/cert-manager.yaml --context $KUBECTX_CLUSTER2
+
+# Verify cert-manager pods are running in both clusters
+# Check Backend Cluster
+kubectl get pods -n cert-manager --context $KUBECTX_CLUSTER1
+
+# Check Edge Cluster
+kubectl get pods -n cert-manager --context $KUBECTX_CLUSTER2
+
+# Wait for all cert-manager pods to be ready (timeout after 2 minutes)
+kubectl wait --for=condition=Ready pods --all -n cert-manager --timeout=120s --context $KUBECTX_CLUSTER1
+kubectl wait --for=condition=Ready pods --all -n cert-manager --timeout=120s --context $KUBECTX_CLUSTER2
 ```
 
-#### Setup Istio
+### 3. Istio Installation
+
+#### Backend Cluster (Cluster 1)
 
 ```sh
-kubectl apply -f apps/cluster1-infra.yaml -n argocd --context $KUBECTX_CLUSTER1
+# Apply Istio base components
+kubectl apply -f clusters/cluster1/istio.yaml --context $KUBECTX_CLUSTER1
+
+# Wait for Istio components to be ready
+kubectl wait --for=condition=available deployment/istiod -n istio-system --timeout=300s --context $KUBECTX_CLUSTER1
+```
+
+#### Edge Cluster (Cluster 2)
+
+```sh
+# Apply Istio base components
+kubectl apply -f clusters/cluster2/istio.yaml --context $KUBECTX_CLUSTER2
+
+# Wait for Istio components to be ready
+kubectl wait --for=condition=available deployment/istiod -n istio-system --timeout=300s --context $KUBECTX_CLUSTER2
+```
+
+## Multi-Cluster Configuration
+
+### 1. Enable Multi-Cluster Discovery
+
+```sh
+# Configure remote secret for Backend Cluster
+istioctl x create-remote-secret \
+  --context=$KUBECTX_CLUSTER1 \
+  --name=cluster1 | \
+  kubectl apply -f - --context=$KUBECTX_CLUSTER2
+
+# Configure remote secret for Edge Cluster
+istioctl x create-remote-secret \
+  --context=$KUBECTX_CLUSTER2 \
+  --name=cluster2 | \
+  kubectl apply -f - --context=$KUBECTX_CLUSTER1
+```
+
+## Application Deployment
+
+### Deploy Sample Application
+
+```sh
+# Deploy Bookinfo application
+kubectl apply -f apps/bookinfo/ -n bookinfo --context $KUBECTX_CLUSTER1
+
+# Deploy Ingress Gateway for Bookinfo
+kubectl apply -f apps/bookinfo/networking/bookinfo-gateway.yaml -n bookinfo --context $KUBECTX_CLUSTER2
+```
+
+## Verification
+
+Verify the multi-cluster setup:
+
+```sh
+# Verify services are visible across clusters
+kubectl get services --all-namespaces --context $KUBECTX_CLUSTER1
+kubectl get services --all-namespaces --context $KUBECTX_CLUSTER2
+
+# Test cross-cluster communication
+kubectl exec -it $(kubectl get pod -l app=productpage -n bookinfo -o jsonpath='{.items[0].metadata.name}') -n bookinfo --context $KUBECTX_CLUSTER1 -- curl -sS http://reviews:9080/reviews/1 | jq
+```
+
+
 ```
