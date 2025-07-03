@@ -128,9 +128,12 @@ kubectl wait --for=condition=Ready pods --all -n cert-manager --timeout=120s --c
 ```sh
 # Apply Istio base components
 kubectl apply -f clusters/cluster1/istio.yaml --context $KUBECTX_CLUSTER1
+```
 
+Verify Istiod is deployed and ready
+```sh
 # Wait for Istio components to be ready
-kubectl wait --for=condition=available deployment/istiod -n istio-system --timeout=300s --context $KUBECTX_CLUSTER1
+kubectl wait --for=condition=Ready pods --all -n istio-system --timeout=120s --context $KUBECTX_CLUSTER1
 ```
 
 #### Edge Cluster (Cluster 2)
@@ -138,9 +141,12 @@ kubectl wait --for=condition=available deployment/istiod -n istio-system --timeo
 ```sh
 # Apply Istio base components
 kubectl apply -f clusters/cluster2/istio.yaml --context $KUBECTX_CLUSTER2
+```
 
+Verify Istiod is deployed and ready
+```sh
 # Wait for Istio components to be ready
-kubectl wait --for=condition=available deployment/istiod -n istio-system --timeout=300s --context $KUBECTX_CLUSTER2
+kubectl wait --for=condition=Ready pods --all -n istio-system --timeout=120s --context $KUBECTX_CLUSTER2
 ```
 
 ## Multi-Cluster Configuration
@@ -149,13 +155,13 @@ kubectl wait --for=condition=available deployment/istiod -n istio-system --timeo
 
 ```sh
 # Configure remote secret for Backend Cluster
-istioctl x create-remote-secret \
+istioctl create-remote-secret \
   --context=$KUBECTX_CLUSTER1 \
   --name=cluster1 | \
   kubectl apply -f - --context=$KUBECTX_CLUSTER2
 
 # Configure remote secret for Edge Cluster
-istioctl x create-remote-secret \
+istioctl create-remote-secret \
   --context=$KUBECTX_CLUSTER2 \
   --name=cluster2 | \
   kubectl apply -f - --context=$KUBECTX_CLUSTER1
@@ -165,12 +171,20 @@ istioctl x create-remote-secret \
 
 ### Deploy Sample Application
 
-```sh
-# Deploy Bookinfo application
-kubectl apply -f apps/bookinfo/ -n bookinfo --context $KUBECTX_CLUSTER1
+#### Cluster1
 
-# Deploy Ingress Gateway for Bookinfo
-kubectl apply -f apps/bookinfo/networking/bookinfo-gateway.yaml -n bookinfo --context $KUBECTX_CLUSTER2
+```sh
+# Deploy Demo Applications 
+kubectl apply -f clusters/cluster1/bookinfo.yaml --context $KUBECTX_CLUSTER1
+kubectl apply -f clusters/cluster1/sleep.yaml --context $KUBECTX_CLUSTER1
+```
+
+#### Cluster2
+
+```sh
+# Deploy Demo Applications 
+kubectl apply -f clusters/cluster2/bookinfo.yaml --context $KUBECTX_CLUSTER2
+kubectl apply -f clusters/cluster2/sleep.yaml --context $KUBECTX_CLUSTER2
 ```
 
 ## Verification
