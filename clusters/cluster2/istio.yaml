@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/argoproj/argocd-example-apps
-    path: apps
+    repoURL: https://github.com/shamusx/crispy-octo-couscous.git
+    path: helm/applications
     targetRevision: HEAD
     helm:
       valueFiles: 
@@ -16,9 +16,7 @@ spec:
     server: https://kubernetes.default.svc
     namespace: argocd
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+    automated: {}
   ignoreDifferences:
     - group: argoproj.io
       kind: Application
