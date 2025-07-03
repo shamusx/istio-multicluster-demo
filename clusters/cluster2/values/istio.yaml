@@ -47,6 +47,9 @@ applications:
     namespace: istio-eastwest-gateway
     annotations:
       argocd.argoproj.io/sync-wave: "8"
+    managedNamespaceMetadata:
+      labels:
+        topology.istio.io/network: cluster2
     tool:
       chart: gateway
       repoURL: https://tis.tetrate.io/charts
