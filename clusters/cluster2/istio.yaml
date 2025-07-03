@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cluster1-istio
+  name: cluster2-istio
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/shamusx/crispy-octo-couscous.git
+    repoURL: https://github.com/argoproj/argocd-example-apps
+    path: apps
     targetRevision: HEAD
-    path: apps/istio
-    directory:
-      recurse: false
+    helm:
+      valuesFile: values/istio.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
@@ -18,5 +18,10 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+ignoreDifferences:
+  - group: argoproj.io
+    kind: Application
+    jsonPointers:
+      - /spec/syncPolicy/automated
+    managedFieldsManagers:
+      - argocd-server
