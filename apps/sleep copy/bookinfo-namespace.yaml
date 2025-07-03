@@ -1,8 +1,0 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: bookinfo
-  labels:
-    istio.io/rev: prod-stable
-    
