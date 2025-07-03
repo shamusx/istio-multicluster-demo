@@ -8,6 +8,7 @@ config:
 
 applications:
   - name: istio-base
+    namespace: istio-system
     tool:
       chart: base
       repoURL: https://tis.tetrate.io/charts

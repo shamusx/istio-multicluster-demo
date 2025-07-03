@@ -10,7 +10,8 @@ spec:
     path: apps
     targetRevision: HEAD
     helm:
-      valuesFile: values/istio.yaml
+      valueFiles: 
+        - https://raw.githubusercontent.com/shamusx/crispy-octo-couscous/refs/heads/main/clusters/cluster2/values/istio.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
@@ -18,10 +19,10 @@ spec:
     automated:
       prune: true
       selfHeal: true
-ignoreDifferences:
-  - group: argoproj.io
-    kind: Application
-    jsonPointers:
-      - /spec/syncPolicy/automated
-    managedFieldsManagers:
-      - argocd-server
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Application
+      jsonPointers:
+        - /spec/syncPolicy/automated
+      managedFieldsManagers:
+        - argocd-server
