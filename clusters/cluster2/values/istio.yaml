@@ -26,7 +26,7 @@ applications:
       argocd.argoproj.io/sync-wave: "4"
     managedNamespaceMetadata:
       labels:
-        topology.istio.io/network: cluster1
+        topology.istio.io/network: cluster2
     tool:
       chart: istiod
       repoURL: https://tis.tetrate.io/charts
