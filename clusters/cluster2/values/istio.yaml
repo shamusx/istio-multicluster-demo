@@ -9,6 +9,8 @@ config:
 applications:
   - name: istio-base
     namespace: istio-system
+    annotations:
+      argocd.argoproj.io/sync-wave: "1"
     tool:
       chart: base
       repoURL: https://tis.tetrate.io/charts
@@ -18,3 +20,35 @@ applications:
           defaultRevision: 1-25-3
           global:
             tag: 1.25.3-tetrate3
+  - name: istiod-stable
+    namespace: istio-system
+    annotations:
+      argocd.argoproj.io/sync-wave: "4"
+    tool:
+      chart: istiod
+      repoURL: https://tis.tetrate.io/charts
+      targetRevision: 1.25.3+tetrate3
+      helm:
+        valuesObject:
+          revisionTags:
+            - prod-stable
+          revision: 1-25-3
+          global:
+            meshID: demomesh
+            network: cluster1
+            multiCluster:
+              clusterName: app-cluster1
+          meshConfig:
+            accessLogFile: /dev/stdout
+  - name: istio-ew-gw
+    namespace: istio-eastwest-gateway
+    annotations:
+      argocd.argoproj.io/sync-wave: "8"
+    tool:
+      chart: gateway
+      repoURL: https://tis.tetrate.io/charts
+      targetRevision: 1.25.3+tetrate3
+      helm:
+        valuesObject:
+          revision: 1-25-3
+          networkGateway: cluster2
