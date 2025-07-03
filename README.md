@@ -221,7 +221,7 @@ metadata:
   name: cross-network-gateway
 spec:
   selector:
-    istio: ew-gw
+    istio: eastwest-gw
   servers:
     - port:
         number: 15443
@@ -242,7 +242,7 @@ metadata:
   name: cross-network-gateway
 spec:
   selector:
-    istio: ew-gw
+    istio: eastwest-gw
   servers:
     - port:
         number: 15443

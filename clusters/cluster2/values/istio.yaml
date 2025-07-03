@@ -43,7 +43,7 @@ applications:
               clusterName: app-cluster2
           meshConfig:
             accessLogFile: /dev/stdout
-  - name: istio-ew-gw
+  - name: istio-eastwest-gw
     namespace: istio-eastwest-gateway
     annotations:
       argocd.argoproj.io/sync-wave: "8"
