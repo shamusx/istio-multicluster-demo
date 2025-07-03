@@ -29,5 +29,9 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    {{- with .managedNamespaceMetadata }}
+    managedNamespaceMetadata:
+    {{ . | toYaml | nindent 6 }}
+    {{- end }}
 ---
 {{ end -}}
