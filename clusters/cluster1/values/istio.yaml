@@ -26,7 +26,7 @@ applications:
       argocd.argoproj.io/sync-wave: "4"
     managedNamespaceMetadata:
       labels:
-        topology.istio.io/network: cluster1
+        topology.istio.io/network: internal
     tool:
       chart: istiod
       repoURL: https://tis.tetrate.io/charts
@@ -38,7 +38,7 @@ applications:
           revision: 1-25-3
           global:
             meshID: demomesh
-            network: cluster1
+            network: internal
             multiCluster:
               clusterName: app-cluster1
           meshConfig:
@@ -47,9 +47,6 @@ applications:
     namespace: istio-eastwest-gateway
     annotations:
       argocd.argoproj.io/sync-wave: "8"
-    managedNamespaceMetadata:
-      labels:
-        topology.istio.io/network: cluster1
     tool:
       chart: gateway
       repoURL: https://tis.tetrate.io/charts
@@ -57,4 +54,4 @@ applications:
       helm:
         valuesObject:
           revision: 1-25-3
-          networkGateway: cluster1
+          networkGateway: internal
