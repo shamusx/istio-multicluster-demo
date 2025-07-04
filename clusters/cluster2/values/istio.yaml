@@ -59,3 +59,15 @@ applications:
         valuesObject:
           revision: 1-25-3
           networkGateway: external
+  - name: istio-edge-gw
+    namespace: edge
+    annotations:
+      argocd.argoproj.io/sync-wave: "10"
+    tool:
+      chart: gateway
+      repoURL: https://tis.tetrate.io/charts
+      targetRevision: 1.25.3+tetrate3
+      helm:
+        valuesObject:
+          revision: 1-25-3
+          networkGateway: external

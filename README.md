@@ -232,7 +232,7 @@ EOF
 
 ## Multi-Cluster Configuration
 
-### 1. Enable Multi-Cluster Discovery
+### Enable Multi-Cluster Discovery
 
 ```sh
 # Configure remote secret for Backend Cluster (Internal)
@@ -250,16 +250,18 @@ istioctl create-remote-secret \
 
 ## Verification
 
-Verify the multi-cluster setup:
+Verify the multi-cluster setup
 
 ```sh
-# Verify services are visible across clusters
-kubectl get services --all-namespaces --context $KUBECTX_CLUSTER1
-kubectl get services --all-namespaces --context $KUBECTX_CLUSTER2
+#### Cluster 2
 
-# Test cross-cluster communication
-kubectl exec -it $(kubectl get pod -l app=productpage -n bookinfo -o jsonpath='{.items[0].metadata.name}') -n bookinfo --context $KUBECTX_CLUSTER1 -- curl -sS http://reviews:9080/reviews/1 | jq
-```
-
-
+```sh
+kubectl exec -it $(kubectl get pod -l app=sleep -n sleep -o jsonpath='{.items[0].metadata.name}' --context $KUBECTX_CLUSTER2) -n sleep --context $KUBECTX_CLUSTER2 -- curl http://productpage.bookinfo.svc.cluster.local:9080 -I
+# Expected Output
+# HTTP/1.1 200 OK
+# server: envoy
+# date: Fri, 04 Jul 2025 00:53:07 GMT
+# content-type: text/html; charset=utf-8
+# content-length: 2080
+# x-envoy-upstream-service-time: 6
 ```
