@@ -5,6 +5,7 @@ This guide explains how to configure fine-grained access control for services in
 ## Architecture Overview
 ```mermaid
 graph TD
+    %% Entry point from Internet
     User[End User] -->|HTTP GET| EdgeGW[Edge Gateway]
 
     %% Edge Cluster (external trust domain)
@@ -30,23 +31,19 @@ graph TD
 
     %% Authorization Policy Connections
     SleepBackend -.->|Allowed: internal.tetrate.io/*| ProductPage
-    EdgeGW -.->|Allowed: Host=edge-bookinfo.sandbox.tetrate.io<br/>SA=istio-edge-gw| ProductPage
+    EdgeGW --->|Allowed: Host=edge-bookinfo.sandbox.tetrate.io<br/>SA=istio-edge-gw| ProductPage
     SleepEdge -.->|❌ Denied: not in trust domain<br/>or host mismatch| ProductPage
 
-    %% Styling
-    classDef allowed fill:#e8f5e9,stroke:#4caf50,stroke-width:2px
-    classDef denied fill:#ffebee,stroke:#f44336,stroke-width:2px
-    classDef internet fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
+    %% Styling AuthZ Links
+    %% link indexes: 
+    %% 0: User --> EdgeGW
+    %% 1: EdgeGW --> SleepEdge
+    %% 2: ProductPage --> Reviews
+    %% 3: ProductPage --> Details
+    %% 4: ProductPage --> Ratings
+    %% 5: SleepBackend -.
 
-    linkStyle 0,1 stroke:#4caf50,stroke-width:2px
-    linkStyle 2 stroke:#f44336,stroke-width:2px,stroke-dasharray: 5
 
-    %% Legend
-    subgraph Legend [ ]
-        direction TB
-        A[Allowed Connection<br/>by Trust Domain or Host + SA]:::allowed
-        B[Denied Connection<br/>due to policy or principal mismatch]:::denied
-    end
 ```
 
 ## Prerequisites
