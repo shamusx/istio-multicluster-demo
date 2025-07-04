@@ -47,6 +47,8 @@ applications:
           meshConfig:
             accessLogFile: /dev/stdout
             trustDomain: internal.tetrate.io
+            trustDomainAliases:
+              - external.tetrate.io
             defaultConfig:
               proxyMetadata:
                 # Enable basic DNS proxying

@@ -33,9 +33,6 @@ applications:
       targetRevision: 1.25.3+tetrate3
       helm:
         valuesObject:
-          pilot:
-            env:
-              PILOT_SKIP_VALIDATE_TRUST_DOMAIN: true
           revisionTags:
             - prod-stable
           revision: 1-25-3
@@ -47,6 +44,8 @@ applications:
           meshConfig:
             accessLogFile: /dev/stdout
             trustDomain: external.tetrate.io
+            trustDomainAliases:
+              - internal.tetrate.io
             defaultConfig:
               proxyMetadata:
                 # Enable basic DNS proxying
