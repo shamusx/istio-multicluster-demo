@@ -34,8 +34,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/shamusx/crispy-octo-couscous.git  # Update with your repo
-    targetRevision: HEAD
+    repoURL: https://github.com/shamusx/istio-multicluster-demo.git
+    targetRevision: main
     path: clusters/common/pki
   destination:
     server: https://kubernetes.default.svc

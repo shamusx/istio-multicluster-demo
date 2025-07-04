@@ -3,7 +3,7 @@ config:
     destination:
       server: https://kubernetes.default.svc
     source:
-      repoURL: https://github.com/shamusx/crispy-octo-couscous.git
+      repoURL: https://github.com/shamusx/istio-multicluster-demo.git
       targetRevision: main
 
 applications:

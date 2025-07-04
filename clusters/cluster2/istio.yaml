@@ -6,12 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/shamusx/crispy-octo-couscous.git
+    repoURL: https://github.com/shamusx/istio-multicluster-demo.git
     path: helm/applications
-    targetRevision: HEAD
+    targetRevision: main
     helm:
       valueFiles: 
-        - https://raw.githubusercontent.com/shamusx/crispy-octo-couscous/refs/heads/main/clusters/cluster2/values/istio.yaml
+        - https://raw.githubusercontent.com/shamusx/istio-multicluster-demo/refs/heads/main/clusters/cluster2/values/istio.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/shamusx/crispy-octo-couscous.git
-    targetRevision: HEAD
+    repoURL: https://github.com/shamusx/istio-multicluster-demo.git
+    targetRevision: main
     path: apps/sleep
     directory:
       recurse: false
