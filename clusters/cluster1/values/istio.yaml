@@ -43,6 +43,7 @@ applications:
               clusterName: app-cluster1
           meshConfig:
             accessLogFile: /dev/stdout
+            trustDomain: internal.tetrate.io
             defaultConfig:
               proxyMetadata:
                 # Enable basic DNS proxying
