@@ -70,4 +70,3 @@ applications:
       helm:
         valuesObject:
           revision: 1-25-3
-          networkGateway: external
