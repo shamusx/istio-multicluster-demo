@@ -33,6 +33,8 @@ applications:
       targetRevision: 1.25.3+tetrate3
       helm:
         valuesObject:
+          env:
+            PILOT_SKIP_VALIDATE_TRUST_DOMAIN: "true"
           revisionTags:
             - prod-stable
           revision: 1-25-3
