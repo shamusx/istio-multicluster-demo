@@ -43,6 +43,10 @@ applications:
               clusterName: app-cluster1
           meshConfig:
             accessLogFile: /dev/stdout
+            defaultConfig:
+              proxyMetadata:
+                # Enable basic DNS proxying
+                ISTIO_META_DNS_CAPTURE: "true"
   - name: istio-eastwest-gw
     namespace: istio-eastwest-gateway
     annotations:

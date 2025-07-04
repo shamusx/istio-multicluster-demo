@@ -149,24 +149,6 @@ Verify Istiod is deployed and ready
 kubectl wait --for=condition=Ready pods --all -n istio-system --timeout=120s --context $KUBECTX_CLUSTER2
 ```
 
-## Multi-Cluster Configuration
-
-### 1. Enable Multi-Cluster Discovery
-
-```sh
-# Configure remote secret for Backend Cluster
-istioctl create-remote-secret \
-  --context=$KUBECTX_CLUSTER1 \
-  --name=cluster1 | \
-  kubectl apply -f - --context=$KUBECTX_CLUSTER2
-
-# Configure remote secret for Edge Cluster
-istioctl create-remote-secret \
-  --context=$KUBECTX_CLUSTER2 \
-  --name=cluster2 | \
-  kubectl apply -f - --context=$KUBECTX_CLUSTER1
-```
-
 ## Application Deployment
 
 ### Deploy Sample Application
@@ -199,14 +181,6 @@ kubectl exec -it $(kubectl get pod -l app=sleep -n sleep -o jsonpath='{.items[0]
 # content-type: text/html; charset=utf-8
 # content-length: 2080
 # x-envoy-upstream-service-time: 8
-```
-
-#### Cluster 2
-
-```sh
-kubectl exec -it $(kubectl get pod -l app=sleep -n sleep -o jsonpath='{.items[0].metadata.name}' --context $KUBECTX_CLUSTER2) -n sleep --context $KUBECTX_CLUSTER2 -- curl http://productpage.bookinfo:9080 -I
-# Expected Output
-# curl: (6) Could not resolve host: productpage.bookinfo
 ```
 
 ### Enable East-West Gateway
@@ -253,6 +227,25 @@ spec:
       hosts:
         - "*.local"
 EOF
+```
+
+
+## Multi-Cluster Configuration
+
+### 1. Enable Multi-Cluster Discovery
+
+```sh
+# Configure remote secret for Backend Cluster (Internal)
+istioctl create-remote-secret \
+  --context=$KUBECTX_CLUSTER1 \
+  --name=cluster1 | \
+  kubectl apply -f - --context=$KUBECTX_CLUSTER2
+
+# Configure remote secret for Edge Cluster (External)
+istioctl create-remote-secret \
+  --context=$KUBECTX_CLUSTER2 \
+  --name=cluster2 | \
+  kubectl apply -f - --context=$KUBECTX_CLUSTER1
 ```
 
 ## Verification
