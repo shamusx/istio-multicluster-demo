@@ -30,9 +30,9 @@ graph TD
     end
 
     %% Authorization Policy Connections
-    SleepBackend -.->|Allowed: internal.tetrate.io/*| ProductPage
-    EdgeGW --->|Allowed: Host=edge-bookinfo.sandbox.tetrate.io<br/>SA=istio-edge-gw| ProductPage
-    SleepEdge -.->|❌ Denied: not in trust domain<br/>or host mismatch| ProductPage
+    SleepBackend -->|Allowed: internal.tetrate.io/*| ProductPage
+    EdgeGW -->|Allowed: Host=edge-bookinfo.sandbox.tetrate.io<br/>SA=istio-edge-gw| ProductPage
+    SleepEdge -->|❌ Denied: not in trust domain<br/>or host mismatch| ProductPage
 
     %% Styling AuthZ Links
     %% link indexes: 
@@ -41,9 +41,13 @@ graph TD
     %% 2: ProductPage --> Reviews
     %% 3: ProductPage --> Details
     %% 4: ProductPage --> Ratings
-    %% 5: SleepBackend -.
+    %% 5: SleepBackend --> ProductPage  (AuthZ allowed)
+    %% 6: EdgeGW --> ProductPage        (AuthZ allowed)
+    %% 7: SleepEdge --> ProductPage     (AuthZ denied)
 
-
+    linkStyle 5 stroke:#4caf50,stroke-width:2px
+    linkStyle 6 stroke:#4caf50,stroke-width:2px
+    linkStyle 7 stroke:#f44336,stroke-width:2px,stroke-dasharray: 5
 ```
 
 ## Prerequisites
