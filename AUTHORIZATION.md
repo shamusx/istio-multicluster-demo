@@ -32,9 +32,9 @@ graph TD
     end
 
     %% AuthZ Policy Paths
-    SleepBackend -->|Allowed: internal.tetrate.io/*| ProductPage
-    EdgeGW -->|Allowed: Host=edge-bookinfo.sandbox.tetrate.io<br/>SA=istio-edge-gw| ProductPage
-    SleepEdge -->|❌ Denied| ProductPage
+    SleepBackend -->|✓ Allowed<br/>internal.tetrate.io/*| ProductPage
+    EdgeGW -->|✓ Allowed<br/>Host=edge-bookinfo.sandbox.tetrate.io<br/>SA=istio-edge-gw| ProductPage
+    SleepEdge -->|✗ Denied| ProductPage
 
     %% Link styling
     linkStyle 4 stroke:#4caf50,stroke-width:2px
