@@ -12,7 +12,6 @@ graph LR
         SleepEdge[Sleep App]
         EGW[East-West Gateway]
         EdgeGW[Edge Gateway]
-        EdgeGW -->|mTLS| SleepEdge
     end
     
     Internet -->|HTTPS| EdgeGW
@@ -105,15 +104,16 @@ kubectl apply -f edge-gateway.yaml --context $KUBECTX_CLUSTER2
 ## Verification
 
 1. Get the external IP of the edge gateway:
-   ```bash
-   EDGE_IP=$(kubectl get svc -n edge -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}' --context $KUBECTX_CLUSTER2)
-   ```
+```bash
+EDGE_IP=$(kubectl get svc istio-edge-gw -n edge -o jsonpath='{.status.loadBalancer.ingress[0].ip}' --context $KUBECTX_CLUSTER2)
+echo $EDGE_IP 
+```
 
 2. Test the edge gateway:
-   ```bash
-   curl -I http://edge-bookinfo.sandbox.tetrate.io \
-     --resolve "edge-bookinfo.sandbox.tetrate.io:80:$EDGE_IP"
-   ```
+```bash
+curl -I http://edge-bookinfo.sandbox.tetrate.io \
+  --resolve "edge-bookinfo.sandbox.tetrate.io:80:$EDGE_IP"
+```
 
 ## Security Notes
 

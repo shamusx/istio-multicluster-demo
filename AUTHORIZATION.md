@@ -148,7 +148,7 @@ EOF
    ```
    Expected: `HTTP/1.1 403 Forbidden`
 
-## 3. Cleanup
+## 3. Cleanup (Optional)
 
 To remove the authorization policies:
 
