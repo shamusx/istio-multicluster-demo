@@ -58,8 +58,8 @@ graph LR
 ### Cluster Contexts
 
 ```sh
-export KUBECTX_CLUSTER1=aks-sw0-124-eastus-0  # Backend Cluster
-export KUBECTX_CLUSTER2=aks-sw0-124-eastus-1  # Edge Cluster
+export KUBECTX_CLUSTER1=aks-swistio-mc-eastus-0   # Backend Cluster
+export KUBECTX_CLUSTER2=aks-swistio-mc-eastus-1  # Edge Cluster
 ```
 
 ## Installation
@@ -195,6 +195,8 @@ kubectl exec -it $(kubectl get pod -l app=sleep -n sleep -o jsonpath='{.items[0]
 
 ### Enable East-West Gateway
 
+#### Cluster1
+
 ```sh
 # Cluster1
 NAMESPACE=istio-eastwest-gateway
@@ -216,7 +218,11 @@ spec:
       hosts:
         - "*.local"
 EOF
+```
 
+#### Cluster2
+
+```sh
 # Cluster2
 NAMESPACE=istio-eastwest-gateway
 cat <<EOF | kubectl apply -n $NAMESPACE -f - --context $KUBECTX_CLUSTER2

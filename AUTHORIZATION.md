@@ -5,17 +5,19 @@ This guide explains how to configure fine-grained access control for services in
 ## Architecture Overview
 ```mermaid
 graph TD
-    %% Entry point from Internet
+    %% Internet entry point
     User[End User] -->|HTTP GET| EdgeGW[Edge Gateway]
 
-    %% Edge Cluster (external trust domain)
+    %% Edge Cluster (external.tetrate.io)
     subgraph Edge_Cluster["Edge Cluster (external.tetrate.io)"]
+        spacer1[" "]:::invisible
+        spacer2[" "]:::invisible
+        spacer3[" "]:::invisible
         EdgeGW[Edge Gateway<br/>Host: edge-bookinfo.sandbox.tetrate.io]
         SleepEdge[Sleep App]
-        EdgeGW -->|mTLS| SleepEdge
     end
 
-    %% Backend Cluster (internal trust domain)
+    %% Backend Cluster (internal.tetrate.io)
     subgraph Backend_Cluster["Backend Cluster (internal.tetrate.io)"]
         subgraph Bookinfo_NS["bookinfo Namespace"]
             ProductPage[ProductPage Service]
@@ -29,25 +31,19 @@ graph TD
         SleepBackend[Sleep App]
     end
 
-    %% Authorization Policy Connections
+    %% AuthZ Policy Paths
     SleepBackend -->|Allowed: internal.tetrate.io/*| ProductPage
     EdgeGW -->|Allowed: Host=edge-bookinfo.sandbox.tetrate.io<br/>SA=istio-edge-gw| ProductPage
-    SleepEdge -->|❌ Denied: not in trust domain<br/>or host mismatch| ProductPage
+    SleepEdge -->|❌ Denied| ProductPage
 
-    %% Styling AuthZ Links
-    %% link indexes: 
-    %% 0: User --> EdgeGW
-    %% 1: EdgeGW --> SleepEdge
-    %% 2: ProductPage --> Reviews
-    %% 3: ProductPage --> Details
-    %% 4: ProductPage --> Ratings
-    %% 5: SleepBackend --> ProductPage  (AuthZ allowed)
-    %% 6: EdgeGW --> ProductPage        (AuthZ allowed)
-    %% 7: SleepEdge --> ProductPage     (AuthZ denied)
-
+    %% Link styling
+    linkStyle 4 stroke:#4caf50,stroke-width:2px
     linkStyle 5 stroke:#4caf50,stroke-width:2px
-    linkStyle 6 stroke:#4caf50,stroke-width:2px
-    linkStyle 7 stroke:#f44336,stroke-width:2px,stroke-dasharray: 5
+    linkStyle 6 stroke:#f44336,stroke-width:2px,stroke-dasharray: 5
+
+    %% Invisible class to pad subgraph labels
+    classDef invisible fill:#ffffff00,stroke:#ffffff00
+    class spacer1,spacer2,spacer3 invisible
 ```
 
 ## Prerequisites

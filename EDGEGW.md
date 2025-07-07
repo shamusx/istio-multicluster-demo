@@ -52,7 +52,8 @@ graph LR
 
 Apply the following configuration to set up the Edge Gateway in the edge cluster:
 
-```yaml
+```sh
+cat << EOF | kubectl apply -f - --context $KUBECTX_CLUSTER2
 ---
 # Edge Gateway
 apiVersion: networking.istio.io/v1
@@ -92,6 +93,7 @@ spec:
         host: productpage.bookinfo.svc.cluster.local
         port:
           number: 9080
+EOF
 ```
 
 ### 2. Apply Configuration
