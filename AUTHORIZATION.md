@@ -32,9 +32,9 @@ graph TD
     end
 
     %% AuthZ Policy Paths
-    SleepBackend -->|✓ Allowed<br/>internal.tetrate.io/*| ProductPage
-    EdgeGW -->|✓ Allowed<br/>Host=edge-bookinfo.sandbox.tetrate.io<br/>SA=istio-edge-gw| ProductPage
-    SleepEdge -->|✗ Denied| ProductPage
+    SleepBackend -->|&check; Allowed<br/>internal.tetrate.io/*| ProductPage
+    EdgeGW -->|&check; Allowed<br/>Host=edge-bookinfo.sandbox.tetrate.io<br/>SA=istio-edge-gw| ProductPage
+    SleepEdge -->|&cross; Denied| ProductPage
 
     %% Link styling
     linkStyle 4 stroke:#4caf50,stroke-width:2px
@@ -55,6 +55,36 @@ graph TD
   export KUBECTX_CLUSTER1=aks-sw0-124-eastus-0  # Backend Cluster
   export KUBECTX_CLUSTER2=aks-sw0-124-eastus-1  # Edge Cluster
   ```
+
+## 0. Verify Workload Certificates
+
+Before applying authorization policies, verify the workload certificates to ensure they're using the correct trust domains.
+
+### Check Backend Cluster Certificate
+
+```bash
+# View the certificate details
+istioctl pc secret -n sleep deploy/sleep --context $KUBECTX_CLUSTER1 -o json | \
+jq -r '.dynamicActiveSecrets[0].secret.tlsCertificate.certificateChain.inlineBytes' | \
+base64 --decode | \
+openssl x509 -noout -text | \
+grep -A 2 'X509v3 Subject Alternative Name'
+```
+
+### Check Edge Cluster Certificate
+
+```bash
+# View the certificate details
+istioctl pc secret -n sleep deploy/sleep --context $KUBECTX_CLUSTER2 -o json | \
+jq -r '.dynamicActiveSecrets[0].secret.tlsCertificate.certificateChain.inlineBytes' | \
+base64 --decode | \
+openssl x509 -noout -text | \
+grep -A 2 'X509v3 Subject Alternative Name'
+```
+
+You should see different trust domains in the Subject Alternative Names:
+- Backend cluster: `spiffe://internal.tetrate.io/...`
+- Edge cluster: `spiffe://external.tetrate.io/...`
 
 ## 1. Internal Access Control
 
