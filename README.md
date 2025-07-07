@@ -17,7 +17,7 @@ This repository provides a production-ready implementation of a secure, multi-cl
 - **Mutual TLS (mTLS)** for all service communications
 - **Service-to-Service Authorization** with precise access controls
 - **Dual Trust Domains** for internal/external separation
-- **Strict mTLS** with `STRICT` mode enforcement
+- **mTLS Flows** Peer to Peer MTLS communication in mesh
 - **Centralized Certificate Management** via cert-manager
 - **Automated Certificate Rotation** for enhanced security
 - **GitOps Workflow** with ArgoCD for policy as code
