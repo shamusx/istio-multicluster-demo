@@ -41,8 +41,8 @@ graph LR
 
 1. Set up cluster contexts:
    ```bash
-   export KUBECTX_CLUSTER1=aks-sw0-124-eastus-0  # Backend Cluster
-   export KUBECTX_CLUSTER2=aks-sw0-124-eastus-1  # Edge Cluster
+  export KUBECTX_CLUSTER1=aks-swistio-mc-eastus-0   # Backend Cluster
+  export KUBECTX_CLUSTER2=aks-swistio-mc-eastus-1  # Edge Cluster
    ```
 
 ## Configuration
