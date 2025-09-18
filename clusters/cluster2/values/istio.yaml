@@ -73,3 +73,7 @@ applications:
       helm:
         valuesObject:
           revision: 1-25-3
+          podAnnotations:
+            service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+            service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+            service.beta.kubernetes.io/aws-load-balancer-type: external
