@@ -19,7 +19,7 @@ applications:
         valuesObject:
           defaultRevision: 1-27-5
           global:
-            tag: 1.25.7-tetrate0
+            tag: 1.27.5-tetrate0
   - name: istiod-stable
     namespace: istio-system
     annotations:
