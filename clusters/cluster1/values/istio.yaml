@@ -14,12 +14,12 @@ applications:
     tool:
       chart: base
       repoURL: https://tis.tetrate.io/charts
-      targetRevision: 1.25.3+tetrate3
+      targetRevision: 1.25.5+tetrate5
       helm:
         valuesObject:
-          defaultRevision: 1-25-3
+          defaultRevision: 1-25-5
           global:
-            tag: 1.25.3-tetrate3
+            tag: 1.25.5-tetrate5
   - name: istiod-stable
     namespace: istio-system
     annotations:
@@ -30,7 +30,7 @@ applications:
     tool:
       chart: istiod
       repoURL: https://tis.tetrate.io/charts
-      targetRevision: 1.25.3+tetrate3
+      targetRevision: 1.25.5+tetrate5
       helm:
         valuesObject:
           pilot:
@@ -38,7 +38,7 @@ applications:
               PILOT_SKIP_VALIDATE_TRUST_DOMAIN: true
           revisionTags:
             - prod-stable
-          revision: 1-25-3
+          revision: 1-25-5
           global:
             meshID: demomesh
             network: internal
@@ -60,10 +60,10 @@ applications:
     tool:
       chart: gateway
       repoURL: https://tis.tetrate.io/charts
-      targetRevision: 1.25.3+tetrate3
+      targetRevision: 1.25.5+tetrate5
       helm:
         valuesObject:
-          revision: 1-25-3
+          revision: 1-25-5
           networkGateway: internal
           service:
             annotations:
