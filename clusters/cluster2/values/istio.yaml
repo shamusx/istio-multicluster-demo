@@ -14,12 +14,12 @@ applications:
     tool:
       chart: base
       repoURL: https://tis.tetrate.io/charts
-      targetRevision: 1.25.3+tetrate3
+      targetRevision: 1.27.5+tetrate0
       helm:
         valuesObject:
-          defaultRevision: 1-25-3
+          defaultRevision: 1-27-5
           global:
-            tag: 1.25.3-tetrate3
+            tag: 1.27.5-tetrate0
   - name: istiod-stable
     namespace: istio-system
     annotations:
@@ -30,12 +30,12 @@ applications:
     tool:
       chart: istiod
       repoURL: https://tis.tetrate.io/charts
-      targetRevision: 1.25.3+tetrate3
+      targetRevision: 1.27.5+tetrate0
       helm:
         valuesObject:
           revisionTags:
             - prod-stable
-          revision: 1-25-3
+          revision: 1-27-5
           global:
             meshID: demomesh
             network: external
@@ -57,10 +57,10 @@ applications:
     tool:
       chart: gateway
       repoURL: https://tis.tetrate.io/charts
-      targetRevision: 1.25.3+tetrate3
+      targetRevision: 1.27.5+tetrate0
       helm:
         valuesObject:
-          revision: 1-25-3
+          revision: 1-27-5
           networkGateway: external
           service:
             annotations:
@@ -74,10 +74,10 @@ applications:
     tool:
       chart: gateway
       repoURL: https://tis.tetrate.io/charts
-      targetRevision: 1.25.3+tetrate3
+      targetRevision: 1.27.5+tetrate0
       helm:
         valuesObject:
-          revision: 1-25-3
+          revision: 1-27-5
           service:
             annotations:
               service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
